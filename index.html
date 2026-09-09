@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- SITE_URL : https://mon-domaine.fr/ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2d4a3e">
+  <meta name="description" content="Au bout du chemin — Les chemins de Castétarbe. Association de randonnée : dix sentiers entretenus pour découvrir le quartier à pied.">
+  <title>Au bout du chemin — Les chemins de Castétarbe</title>
+  <link rel="canonical" href="https://mon-domaine.fr/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="images/logo.png" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+  <link rel="apple-touch-icon" href="images/logo.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Au bout du chemin">
+  <meta property="og:url" content="https://mon-domaine.fr/">
+  <meta property="og:title" content="Au bout du chemin — Les chemins de Castétarbe">
+  <meta property="og:description" content="Association de randonnée et d'entretien des sentiers à Castétarbe. Dix chemins entretenus par nos bénévoles.">
+  <meta property="og:image" content="https://mon-domaine.fr/images/legacy-opt/hero-1200.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="573">
+  <meta property="og:image:alt" content="Chemins de Castétarbe">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Au bout du chemin — Les chemins de Castétarbe">
+  <meta name="twitter:description" content="Association de randonnée et d'entretien des sentiers à Castétarbe. Dix chemins entretenus par nos bénévoles.">
+  <meta name="twitter:image" content="https://mon-domaine.fr/images/legacy-opt/hero-1200.webp">
+  <meta name="twitter:image:alt" content="Chemins de Castétarbe">
+
+  <link rel="preload" href="fonts/fraunces-400.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="preload" as="image" type="image/webp"
+    imagesrcset="images/legacy-opt/hero-600.webp 600w, images/legacy-opt/hero-800.webp 800w, images/legacy-opt/hero-1200.webp 1200w"
+    imagesizes="100vw">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Au bout du chemin",
+    "description": "Association de randonnée et d'entretien des sentiers à Castétarbe.",
+    "email": "castetarbe@orange.fr",
+    "url": "https://mon-domaine.fr/",
+    "sameAs": ["https://www.facebook.com/p/Au-bout-du-chemin-100064303497237/"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Castétarbe",
+      "addressRegion": "Orthez",
+      "addressCountry": "FR"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Trail / Marche « La Castétarbaise »",
+    "startDate": "2026-09-13T09:30:00+02:00",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "Place",
+      "name": "Salle Piquemal",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Castétarbe",
+        "addressRegion": "Orthez",
+        "addressCountry": "FR"
+      }
+    },
+    "organizer": {
+      "@type": "Organization",
+      "name": "Foyer Rural de Castétarbe"
+    },
+    "image": "https://mon-domaine.fr/images/events/castetarbaise-2026.jpg",
+    "description": "Trail chronométré 15 km ou 10 km, marche 10 km. Boisson offerte, buvette, grillades, frites.",
+    "url": "https://www.pyreneeschrono.fr",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Trail 15 km",
+        "price": "15",
+        "priceCurrency": "EUR",
+        "url": "https://www.pyreneeschrono.fr",
+        "availability": "https://schema.org/InStock"
+      },
+      {
+        "@type": "Offer",
+        "name": "Trail 10 km",
+        "price": "10",
+        "priceCurrency": "EUR",
+        "url": "https://www.pyreneeschrono.fr",
+        "availability": "https://schema.org/InStock"
+      },
+      {
+        "@type": "Offer",
+        "name": "Marche 10 km",
+        "price": "7",
+        "priceCurrency": "EUR",
+        "url": "https://www.pyreneeschrono.fr",
+        "availability": "https://schema.org/InStock"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
+    crossorigin="anonymous"
+  >
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — Menu fixe qui reste visible au défilement
+       ============================================================ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+
+      <!-- Logo / nom court de l'association -->
+      <a href="#hero" class="header__logo">
+        <img src="images/logo.svg" alt="Au bout du chemin" class="header__logo-img" width="40" height="40">
+        Au bout du chemin
+      </a>
+
+      <!-- Navigation + Facebook + menu mobile -->
+      <div class="header__controls">
+        <nav class="nav" id="nav">
+          <ul class="nav__list">
+            <li><a href="#hero"       class="nav__link">Accueil</a></li>
+            <li><a href="#asso"       class="nav__link">L'association</a></li>
+            <li><a href="#chemins"    class="nav__link">Nos chemins</a></li>
+            <li><a href="#carte"      class="nav__link">Carte</a></li>
+            <li><a href="#balades"    class="nav__link">Balades</a></li>
+            <li><a href="#apropos"    class="nav__link">À propos</a></li>
+            <li><a href="#evenements" class="nav__link">Événements</a></li>
+            <li><a href="#contact"    class="nav__link nav__link--cta">Contact</a></li>
+          </ul>
+        </nav>
+
+        <a
+          href="https://www.facebook.com/p/Au-bout-du-chemin-100064303497237/"
+          class="header__facebook"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Suivez-nous sur Facebook"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span>Suivez-nous sur Facebook</span>
+        </a>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1 — HERO : première impression, image plein écran
+         ============================================================ -->
+    <section class="hero" id="hero">
+      <!-- Image de fond (remplacez le src par votre propre photo de chemin) -->
+      <div class="hero__bg">
+        <picture>
+          <source type="image/webp" srcset="images/legacy-opt/hero-600.webp 600w, images/legacy-opt/hero-800.webp 800w, images/legacy-opt/hero-1200.webp 1200w" sizes="100vw">
+          <img
+            src="images/legacy-opt/hero-1200.jpg"
+            alt="Chemins de Castétarbe"
+            class="hero__bg-img"
+            width="1200"
+            height="573"
+            fetchpriority="high"
+          >
+        </picture>
+        <div class="hero__overlay"></div>
+      </div>
+
+      <div class="container hero__content reveal">
+        <p class="hero__label">Association de randonnée</p>
+        <h1 class="hero__title">Au bout<br>du chemin</h1>
+        <p class="hero__tagline">Les chemins de Castétarbe</p>
+        <a href="#chemins" class="btn btn--primary">Découvrir les chemins</a>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2 — PRÉSENTATION DE L'ASSOCIATION
+         ============================================================ -->
+    <section class="section asso" id="asso">
+      <div class="container">
+
+        <header class="section__header reveal">
+          <span class="section__label">Qui sommes-nous ?</span>
+          <h2 class="section__title">Notre association</h2>
+        </header>
+
+        <div class="asso__grid">
+          <!-- Colonne texte — remplacez le placeholder par votre contenu -->
+          <div class="asso__text reveal">
+            <p>
+              L'association Au bout du chemin regroupe
+              des habitants de Castétarbe passionnés de marche et de nature. Nous entretenons,
+              balisons et faisons connaître le réseau de sentiers qui traverse notre
+              quartier et ses environs.
+            </p>
+            <p>
+              Chaque année, nous organisons des randonnées guidées, des journées
+              d'entretien des chemins et des actions de sensibilisation au respect
+              de l'environnement. Rejoignez-nous pour préserver et partager
+              ce patrimoine naturel unique.
+            </p>
+          </div>
+
+          <!-- Colonne chiffres clés — modifiez les valeurs selon votre asso -->
+          <ul class="asso__stats reveal">
+            <li class="stat">
+              <span class="stat__number">10</span>
+              <span class="stat__label">Sentiers balisés</span>
+            </li>
+            <!-- TODO : confirmer le nombre de membres actifs -->
+            <li class="stat">
+              <span class="stat__number">45</span>
+              <span class="stat__label">Membres actifs</span>
+            </li>
+            <!-- TODO : confirmer le nombre de randonnées annuelles -->
+            <li class="stat">
+              <span class="stat__number">8</span>
+              <span class="stat__label">Randonnées / an</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — NOS CHEMINS : grille de cartes sentiers
+         Dupliquez une .trail-card pour ajouter un nouveau sentier
+         ============================================================ -->
+    <section class="section trails" id="chemins">
+      <div class="container">
+
+        <header class="section__header reveal">
+          <span class="section__label">Itinéraires</span>
+          <h2 class="section__title">Nos chemins</h2>
+          <p class="section__subtitle">
+            Dix sentiers entretenus par l'association pour découvrir Castétarbe à pied,
+            loin des routes.
+          </p>
+        </header>
+
+        <div class="trails__grid">
+
+          <!-- ── Pachera ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="pachera" tabindex="0" role="button" aria-label="Voir le détail du chemin Pachera">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Pachera/Pachera-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Pachera/Pachera-01-206.jpg" alt="Le chemin Pachera" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin Pachera</h3>
+              <p class="trail-card__desc">
+                Depuis le chemin Cametot, il remonte vers le chemin de Tâche en évitant la route,
+                avec la possibilité d'enchaîner sur le chemin Peyraube.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── Jacob ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="jacob" tabindex="0" role="button" aria-label="Voir le détail du chemin Jacob">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Jacob/Jacob-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Jacob/Jacob-01-206.jpg" alt="Le chemin Jacob" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin Jacob</h3>
+              <p class="trail-card__desc">
+                Il relie plusieurs chemins sans passer par la route. Il démarre du chemin Mesplé
+                ou du chemin de l'école ; des panneaux en bois indiquent la voie.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── des Barricots ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="barricots" tabindex="0" role="button" aria-label="Voir le détail du chemin des Barricots">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Barricots/Barricots-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Barricots/Barricots-01-206.jpg" alt="Le chemin des Barricots" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin des Barricots</h3>
+              <p class="trail-card__desc">
+                Dix mois de travail pour redonner vie à ce chemin qui relie le chemin Larroque au
+                chemin Touzaa. Il alterne les passages à découvert dans les champs de maïs et une
+                sente sous une voûte de châtaigniers.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── de Touya ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="touya" tabindex="0" role="button" aria-label="Voir le détail du chemin de Touya">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Menain-Touya/Menain-Touya-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Menain-Touya/Menain-Touya-01-206.jpg" alt="Le chemin de Touya" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin de Touya</h3>
+              <p class="trail-card__desc">
+                Le tout premier chemin nettoyé par l'association. Il part de l'école de Castétarbe
+                pour rejoindre le chemin Pouyanne, avec une bifurcation possible vers le chemin de
+                Menain.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── de Menain ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="menain" tabindex="0" role="button" aria-label="Voir le détail du chemin de Menain">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Menain-Touya/Menain-Touya-02-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Menain-Touya/Menain-Touya-02-206.jpg" alt="Le chemin de Menain" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin de Menain</h3>
+              <p class="trail-card__desc">
+                Il rejoint le chemin de Touya dans la forêt, en descendant au milieu des bambous
+                depuis le chemin Ménain.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── de Justine (en chantier) ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="justine" tabindex="0" role="button" aria-label="Voir le détail du chemin de Justine">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Justine-Peyraube/Justine-Peyraube-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Justine-Peyraube/Justine-Peyraube-01-206.jpg" alt="Le chemin de Justine — en chantier" width="206" height="206" loading="lazy"></picture>
+              <span class="trail-card__badge trail-card__badge--chantier">En chantier</span>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin de Justine</h3>
+              <p class="trail-card__desc">
+                Actuellement en chantier : il reliera la route vieille au chemin Pouyanne, avec une
+                remontée possible vers le chemin de Tâche via le chemin Peyraube.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── Beller ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="beller" tabindex="0" role="button" aria-label="Voir le détail du chemin Beller">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Beller/Beller-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Beller/Beller-01-206.jpg" alt="Le chemin Beller" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin Beller</h3>
+              <p class="trail-card__desc">
+                On l'atteint en remontant le long d'un champ, juste après le petit lac ; il permet
+                de bifurquer pour redescendre vers le chemin du Brana.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── des crêtes ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="des-cretes" tabindex="0" role="button" aria-label="Voir le détail du chemin des crêtes">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/des-cretes/des-cretes-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/des-cretes/des-cretes-01-206.jpg" alt="Le chemin des crêtes" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin des crêtes</h3>
+              <p class="trail-card__desc">
+                Le chemin de crête du Barat du Rey, point culminant du secteur (~169 m), avec une
+                vue imprenable sur les Pyrénées.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── du lac ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="du-lac" tabindex="0" role="button" aria-label="Voir le détail du chemin du lac">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/du-lac/du-lac-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/du-lac/du-lac-01-206.jpg" alt="Le chemin du lac" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin du lac</h3>
+              <p class="trail-card__desc">
+                Un chemin de terre qui descend jusqu'à un petit lac, que l'on contourne par la droite
+                avant de poursuivre.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- ── Lalanne ── -->
+          <article class="trail-card trail-card--clickable reveal" data-trail="lalanne" tabindex="0" role="button" aria-label="Voir le détail du chemin Lalanne">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Lalanne/Lalanne-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Lalanne/Lalanne-01-206.jpg" alt="Le chemin Lalanne" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin Lalanne</h3>
+              <p class="trail-card__desc">
+                Depuis la route, il s'enfonce dans le bois puis grimpe pour rejoindre les hauteurs,
+                en direction de la crête du Barat du Rey.
+              </p>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+          <!-- TODO: description et départ du chemin Lasserre -->
+          <article class="trail-card trail-card--clickable reveal is-hidden" data-trail="lasserre" tabindex="0" role="button" aria-label="Voir le détail du chemin Lasserre">
+            <div class="trail-card__image">
+              <picture><source type="image/webp" srcset="images/chemins-opt/Lasserre/Lasserre-01-206.webp 206w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"><img src="images/chemins-opt/Lasserre/Lasserre-01-206.jpg" alt="Le chemin Lasserre" width="206" height="206" loading="lazy"></picture>
+            </div>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le chemin Lasserre</h3>
+              <span class="trail-card__more">Voir le détail →</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION — LA CARTE DES CHEMINS (Leaflet / OpenStreetMap)
+         ============================================================ -->
+    <section class="section map-section" id="carte">
+      <div class="container">
+
+        <header class="section__header reveal">
+          <span class="section__label">Repères</span>
+          <h2 class="section__title">La carte des chemins</h2>
+          <p class="section__subtitle">
+            Cliquez sur un chemin pour ouvrir sa fiche.
+          </p>
+        </header>
+
+        <div class="trail-map-wrapper reveal">
+          <div id="trail-map" class="trail-map" aria-label="Carte interactive des chemins de Castétarbe">
+            <noscript>
+              <p class="map-fallback">La carte interactive nécessite JavaScript. Activez-le pour explorer les chemins de Castétarbe.</p>
+            </noscript>
+          </div>
+          <p class="map-coords" id="map-coords" aria-hidden="true"></p>
+        </div>
+
+        <p class="map-download reveal">
+          <a href="parcours/grand-tour.gpx" class="btn btn--primary" download>
+            ⤓ Télécharger le parcours (GPX)
+          </a>
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION — IDÉES DE BALADES
+         ============================================================ -->
+    <section class="section balades" id="balades">
+      <div class="container">
+
+        <header class="section__header reveal">
+          <span class="section__label">Itinéraires</span>
+          <h2 class="section__title">Idées de balades</h2>
+          <p class="section__subtitle">
+            Trois parcours préconçus par l'association pour découvrir Castétarbe à votre rythme.
+          </p>
+        </header>
+
+        <div class="balades__grid">
+
+          <!-- ── Boucle des Barricots ── -->
+          <article class="trail-card balade-card reveal" data-balade="barricots">
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">La boucle des Barricots</h3>
+              <div class="balade-card__badges">
+                <span class="balade-badge balade-badge--distance">— km</span>
+                <span class="balade-badge balade-badge--duration">≈ 1 h</span>
+                <span class="balade-badge balade-badge--easy">Facile</span>
+              </div>
+              <p class="trail-card__desc">
+                Une boucle familiale au fil de la rivière, à travers les champs de maïs
+                et sous une voûte de châtaigniers.
+              </p>
+              <p class="balade-card__depart"><strong>Départ :</strong> école de Castétarbe.</p>
+              <div class="balade-card__chemins">
+                <p class="balade-card__chemins-label">Chemins traversés</p>
+                <p class="balade-card__chemins-text">
+                  chemin de l'école → chemin de Touzaa → chemin des Barricots → chemin Larroque
+                  (le long de la rivière) → chemin Touya → retour à l'école.
+                </p>
+              </div>
+              <div class="balade-map__actions">
+                <button type="button" class="balade-map__expand btn btn--primary">Agrandir sur la carte</button>
+                <a href="parcours/boucle-barricots.gpx" class="balade-map__gpx" download>Télécharger le GPX</a>
+              </div>
+            </div>
+            <div
+              class="balade-map"
+              id="balade-map-barricots"
+              aria-label="Carte de la balade La boucle des Barricots"
+            ></div>
+          </article>
+
+          <!-- ── La 8,5 km ── -->
+          <article class="trail-card balade-card reveal" data-balade="8-5km">
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">La 8,5 km</h3>
+              <div class="balade-card__badges">
+                <span class="balade-badge balade-badge--distance">8,5 km</span>
+                <span class="balade-badge balade-badge--duration">≈ 2 h 15</span>
+                <span class="balade-badge balade-badge--medium">Moyen</span>
+              </div>
+              <p class="trail-card__desc">
+                Elle emprunte la majorité des chemins réhabilités et passe par les crêtes
+                du Barat du Rey, avec une vue imprenable sur les Pyrénées.
+              </p>
+              <p class="balade-card__depart"><strong>Départ :</strong> école de Castétarbe.</p>
+              <div class="balade-map__actions">
+                <button type="button" class="balade-map__expand btn btn--primary">Agrandir sur la carte</button>
+                <a href="parcours/8-5km.gpx" class="balade-map__gpx" download>Télécharger le GPX</a>
+              </div>
+            </div>
+            <div
+              class="balade-map"
+              id="balade-map-8-5km"
+              aria-label="Carte de la balade La 8,5 km"
+            ></div>
+          </article>
+
+          <!-- ── Le tour de Castétarbe ── -->
+          <article class="trail-card balade-card reveal" data-balade="grand-tour">
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Le tour de Castétarbe (le grand tour)</h3>
+              <div class="balade-card__badges">
+                <span class="balade-badge balade-badge--distance">10,57 km</span>
+                <span class="balade-badge balade-badge--duration">3 h 40</span>
+                <span class="balade-badge">+221 m</span>
+                <span class="balade-badge balade-badge--medium">Moyen</span>
+              </div>
+              <p class="trail-card__desc">
+                Le grand parcours qui traverse tous les chemins remis en état. Au nord,
+                entre Mounicq et le Barat du Rey, une crête offre un panorama parfait sur les Pyrénées.
+              </p>
+              <p class="balade-card__summit">
+                Point culminant : le Barat du Rey (169 m), avec vue sur les Pyrénées.
+              </p>
+              <p class="balade-card__depart"><strong>Départ :</strong> parking de la Salle Piquemal.</p>
+              <button
+                type="button"
+                class="balade-card__itinerary-btn"
+                id="open-grand-tour-itinerary"
+                aria-haspopup="dialog"
+              >
+                Voir l'itinéraire détaillé →
+              </button>
+              <div class="balade-map__actions">
+                <button type="button" class="balade-map__expand btn btn--primary">Agrandir sur la carte</button>
+                <a href="parcours/grand-tour.gpx" class="balade-map__gpx" download>Télécharger le GPX</a>
+              </div>
+            </div>
+            <div
+              class="balade-map"
+              id="balade-map-grand-tour"
+              aria-label="Carte de la balade Le tour de Castétarbe"
+            ></div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4 — À PROPOS : histoire et mission
+         ============================================================ -->
+    <section class="section about" id="apropos">
+      <div class="container about__grid">
+
+        <!-- Image illustrative — remplacez par une photo de votre asso -->
+        <div class="about__visual reveal">
+          <picture><source type="image/webp" srcset="images/legacy-opt/apropos-480.webp 480w, images/legacy-opt/apropos-800.webp 800w" sizes="(max-width: 768px) 100vw, 50vw"><img src="images/legacy-opt/apropos-800.jpg" alt="Un chemin entretenu par l'association" width="1024" height="768" loading="lazy"></picture>
+        </div>
+
+        <div class="about__content reveal">
+          <span class="section__label">Notre histoire</span>
+          <h2 class="section__title">À propos</h2>
+
+          <p class="about__text">
+            L'association « Au bout du chemin » redonne vie aux anciens chemins de Castétarbe,
+            longtemps laissés à l'abandon. Depuis les premiers sentiers rouverts en 2014, ses
+            bénévoles nettoient, balisent et entretiennent un réseau de chemins qui permet de
+            relier le village et de se promener sans emprunter la route.
+          </p>
+          <p class="about__text">
+            Du premier chemin de Touya dégagé aux dix mois de travail qu'a demandés le chemin
+            des Barricots, chaque sentier est le fruit d'un travail patient et collectif. Notre
+            mission : entretenir et baliser les chemins, accueillir les randonneurs, faire
+            connaître le patrimoine naturel de Castétarbe et rassembler les habitants autour du
+            respect de la nature et du vivre-ensemble.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5 — NOS ÉVÉNEMENTS
+         ============================================================ -->
+    <section class="section events" id="evenements">
+      <div class="container">
+
+        <header class="section__header reveal">
+          <span class="section__label">Agenda</span>
+          <h2 class="section__title">Nos événements</h2>
+          <p class="section__subtitle">
+            Prochain rendez-vous et retour sur les manifestations passées.
+          </p>
+        </header>
+
+        <div class="events__grid">
+
+          <article class="trail-card event-card event-card--upcoming reveal">
+            <span class="trail-card__badge trail-card__badge--upcoming">Prochainement</span>
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Trail / Marche « La Castétarbaise »</h3>
+              <time class="event-card__date" datetime="2026-09-13">
+                Dimanche 13 septembre 2026 — Salle Piquemal, Castétarbe / Orthez
+              </time>
+              <p class="event-card__summary">
+                Trail chronométré 15 km (15&nbsp;€) ou 10 km (10&nbsp;€), 350 m D+, départ 9h30.
+                Marche 10 km (7&nbsp;€), départ 9h35. Boisson offerte, buvette, grillades, frites.
+              </p>
+              <div class="event-card__actions">
+                <a
+                  href="https://www.pyreneeschrono.fr"
+                  class="btn btn--primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Préinscription sur pyreneeschrono.fr
+                </a>
+                <p class="event-card__contact">
+                  <a href="mailto:foyercastetarbe@gmail.com">foyercastetarbe@gmail.com</a>
+                  ·
+                  <a href="tel:+33684870938">06 84 87 09 38</a>
+                </p>
+              </div>
+              <p class="event-card__partner">En partenariat avec le Foyer Rural de Castétarbe</p>
+            </div>
+            <button type="button" class="event-card__poster-btn" data-lightbox="images/events/castetarbaise-2026.jpg" aria-label="Agrandir l'affiche La Castétarbaise">
+              <picture>
+                <source type="image/webp" srcset="images/events/castetarbaise-2026-600.webp 600w, images/events/castetarbaise-2026.webp 1000w" sizes="(max-width: 640px) 100vw, 400px">
+                <img
+                  src="images/events/castetarbaise-2026.jpg"
+                  width="1000"
+                  height="1414"
+                  loading="lazy"
+                  alt="Affiche Trail / Marche La Castétarbaise — dimanche 13 septembre 2026, Salle Piquemal, Castétarbe"
+                >
+              </picture>
+            </button>
+          </article>
+
+          <article class="trail-card event-card reveal">
+            <div class="trail-card__body">
+              <h3 class="trail-card__title">Castétarbe en fête</h3>
+            </div>
+            <button type="button" class="event-card__poster-btn" data-lightbox="images/posters-opt/affiche-castetarbe-en-fete-600.jpg" aria-label="Agrandir l'affiche Castétarbe en fête">
+              <img
+                src="images/posters-opt/affiche-castetarbe-en-fete-600.jpg"
+                alt="Affiche Castétarbe en fête"
+                width="1080"
+                height="1526"
+                loading="lazy"
+              >
+            </button>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6 — CONTACT : formulaire + email de l'association
+         ============================================================ -->
+    <section class="section contact" id="contact">
+      <div class="container contact__grid">
+
+        <header class="contact__intro reveal">
+          <span class="section__label">Nous écrire</span>
+          <h2 class="section__title">Contact</h2>
+          <p class="contact__text">
+            Une question sur un sentier, envie de devenir bénévole ou de participer
+            à une randonnée ? Écrivez-nous, nous vous répondrons rapidement.
+          </p>
+          <!-- Email de l'association — remplacez par le vrai -->
+          <a href="mailto:castetarbe@orange.fr" class="contact__email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M2 7l10 7 10-7"/>
+            </svg>
+            castetarbe@orange.fr
+          </a>
+        </header>
+
+        <!-- Formulaire — envoi via Formspree (configurez FORMSPREE_ID dans js/main.js) -->
+        <form
+          class="contact__form reveal"
+          id="contact-form"
+          action="#"
+          method="POST"
+          novalidate
+        >
+          <input type="hidden" name="_subject" value="Nouveau message depuis le site Au bout du chemin">
+          <div class="form-honeypot" aria-hidden="true">
+            <label for="website">Ne pas remplir ce champ</label>
+            <input type="text" id="website" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="name">Nom</label>
+            <input type="text" id="name" name="name" placeholder="Votre nom" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Votre message…" required></textarea>
+          </div>
+          <!-- Zone de retour utilisateur (succès / erreur) -->
+          <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+          <button type="submit" class="btn btn--primary btn--full">Envoyer le message</button>
+          <p class="form-privacy">Les informations saisies servent uniquement à répondre à votre message et ne sont pas conservées.</p>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="#hero" class="footer__brand">
+        <img src="images/logo.svg" alt="Au bout du chemin" class="footer__logo" width="48" height="48">
+        <p class="footer__name">Au bout du chemin</p>
+      </a>
+      <a
+        href="https://www.facebook.com/p/Au-bout-du-chemin-100064303497237/"
+        class="footer__facebook"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        Suivez-nous sur Facebook
+      </a>
+      <p class="footer__copy">&copy; 2026 — Au bout du chemin, Castétarbe. Tous droits réservés.</p>
+      <p class="footer__legal">
+        <a href="mentions-legales.html">Mentions légales</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script principal : menu mobile, scroll reveal, formulaire -->
+  <!-- Modale fiche sentier (contenu injecté par trails.js) -->
+  <div class="trail-modal" id="trail-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trail-modal-title">
+    <div class="trail-modal__backdrop" id="trail-modal-backdrop"></div>
+    <div class="trail-modal__dialog">
+      <button type="button" class="trail-modal__close" id="trail-modal-close" aria-label="Fermer">&times;</button>
+      <div class="trail-modal__content" id="trail-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Modale itinéraire — Le tour de Castétarbe -->
+  <div class="trail-modal" id="itinerary-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="itinerary-modal-title">
+    <div class="trail-modal__backdrop" id="itinerary-modal-backdrop"></div>
+    <div class="trail-modal__dialog">
+      <button type="button" class="trail-modal__close" id="itinerary-modal-close" aria-label="Fermer">&times;</button>
+      <div class="trail-modal__content">
+        <h2 class="trail-modal__title" id="itinerary-modal-title">Le tour de Castétarbe — Itinéraire (10,57 km)</h2>
+
+        <p class="itinerary-intro">
+          <strong>Départ (parking de la Salle Piquemal) :</strong> à la sortie du parking, prendre en face le
+          chemin de Tâche jusqu'à une fourche.
+        </p>
+
+        <ol class="itinerary-list">
+          <li>Descendre à gauche le chemin Peyraube, puis le chemin Justine (à gauche) jusqu'au chemin Pouyanne ; le suivre jusqu'au carrefour de la RD415.</li>
+          <li>Traverser prudemment la départementale, prendre le chemin du Brana en face sur quelques mètres, puis à droite un chemin de terre vers un petit lac ; le contourner par la droite, remonter le long d'un champ jusqu'au chemin Beller, puis bifurquer à gauche pour redescendre vers le chemin du Brana.</li>
+          <li>À droite sur la route sur ~100&nbsp;m, jusqu'au chemin de Lalanne, à gauche.</li>
+          <li>Suivre ce chemin, entrer dans le bois, puis monter pour rejoindre un autre chemin.</li>
+          <li>À gauche, un sentier grimpe vers la crête et l'un des points hauts du parcours : le Barat du Rey.</li>
+          <li>Profiter du beau point de vue sur les Pyrénées, puis continuer le long de la crête.</li>
+          <li>Obliquer à droite et descendre jusqu'à l'ancienne source Mounicq.</li>
+          <li>Remonter le sentier dans le bois jusqu'au chemin de Trébucq.</li>
+          <li>Continuer tout droit jusqu'à la RD415 (route Vieille de Castétarbe).</li>
+          <li>À gauche jusqu'au carrefour du chemin de Larte, puis à droite peu après.</li>
+          <li>Suivre ce chemin jusqu'au chemin de Touzaa.</li>
+          <li>En face, prendre le petit chemin des Barricots jusqu'au chemin Larroque.</li>
+          <li>À gauche ; continuer jusqu'au chemin de terre dit de Touya, à droite.</li>
+          <li>Le suivre pour revenir au parking de la Salle Piquemal.</li>
+        </ol>
+
+        <aside class="itinerary-tip">
+          <strong>Bon à savoir</strong>
+          <p>
+            Entre les points 2 et 3, après le petit lac, un ruisseau (~1&nbsp;m de large) est à franchir :
+            parcours à privilégier par temps sec. Une table de pique-nique vous attend sur la crête,
+            entre les points 7 et 8.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visionneuse pour agrandir les affiches -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image agrandie" tabindex="-1">
+    <div class="lightbox__backdrop" id="lightbox-backdrop"></div>
+    <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Fermer">&times;</button>
+    <img class="lightbox__img" id="lightbox-img" src="" alt="">
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    defer
+    integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
+    crossorigin="anonymous"
+  ></script>
+  <script src="js/image-manifest.js" defer></script>
+  <script src="js/images.js" defer></script>
+  <script src="js/a11y.js" defer></script>
+  <script src="js/trails.js" defer></script>
+  <script src="js/trail-tracks.js" defer></script>
+  <script src="js/parcours-grand-tour.js" defer></script>
+  <script src="js/map.js" defer></script>
+  <script src="js/balades.js" defer></script>
+  <script src="js/main.js" defer></script>
+
+</body>
+</html>

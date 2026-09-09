@@ -1,0 +1,16 @@
+{
+  "name": "association-rando",
+  "private": true,
+  "description": "Site statique — Au bout du chemin, Castétarbe",
+  "scripts": {
+    "images": "node scripts/optimize-images.js",
+    "fetch-legacy": "node scripts/fetch-legacy-images.js",
+    "build-gpx": "node scripts/build-gpx.js",
+    "download-fonts": "node scripts/download-fonts.js",
+    "generate-favicon": "node scripts/generate-favicon.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5",
+    "to-ico": "^1.1.5"
+  }
+}
